@@ -3,7 +3,7 @@
 
 #If any part of this code is used in publishable documents, please cite:
 #    Yusong Liu, Tongxin Wang, and Ben Duggan et. al, 
-#          SPCS: A Spatial and Pattern Combined Smoothing Method of Spatial Transcriptomic Expression (2021)
+#          SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression (2021)
 
 require("Matrix")
 require("rsvd")
