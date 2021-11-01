@@ -1,2 +1,2 @@
 # SPCS
-A Spatial and Pattern Combined Smoothing Method of Spatial Transcriptomic Expression
+A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression
