@@ -28,7 +28,7 @@ To draw the heatmap of gene expression, please also include:
 P.S: Other versions of these packages may also work well with our implementation.
 
 ## The tutorial
-We have provided a step-by-step tutorial for our SPCS R implementation. Please see "tutorial.htm" for details.
+We have provided a step-by-step tutorial for our SPCS R implementation. Please see "tutorial.md" for details.
 
 ## The citation
 If any code in this reposition is used in any publishable works, please citing:
