@@ -1,15 +1,6 @@
----
-title: Tutorial of SPCS
-author: Yusong Liu
-output:
-  html_document: 
-    toc: yes
-    keep_md: yes
-  pdf_document:
-    toc: yes
-editor_options: 
-  chunk_output_type: console
----
+# Tutorial for SPCS
+_Yusong Liu_
+
 
 Spatial and Pattern Combined Smoothing (SPCS) is a novel two-factor smoothing technique, that employs k-nearest neighbor technique to utilize associations from transcriptome and Euclidean space from the Spatial Transcriptomic (ST) data. Here we present an R implementation of this method and provide a step-by-step example using a PDAC slide (PDACA1) in (Moncada R, et.al 2020).
 
@@ -217,10 +208,9 @@ ggplot(data.using, aes(coord1, coord2, fill=!!sym(gene))) + ggtitle(gene) +
             panel.border = element_blank(),panel.grid.major = element_blank(),panel.grid.minor = element_blank(),
             axis.ticks = element_blank(),axis.text = element_blank(),axis.title = element_blank())
 ```
+![heatmap-1](https://user-images.githubusercontent.com/5370174/139857309-89cdba15-b9b8-4a8c-bd1d-a5d7355fd5b0.png)
 
-![](tutorial_files/figure-html/heatmap-1.png)<!-- -->
-
-#Citation
+# Citation
 If any code in this reposition is used in any publishable works, please citing:
   - **Liu Y, Wang T, Duggan B _et al._**, "SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (Under review).
       
