@@ -76,16 +76,7 @@ gene.zero.cutoff = 0.7
 gene.var.cutoff = 0.0
 
 filtered.genes <- selectGenes(data, gene.zero.cutoff, gene.var.cutoff)
-```
 
-```
-## [1] "Filter genes"
-## [1] "Number of genes 19738"
-## [1] "Remaining number of genes 485"
-## [1] "Remaining number of genes 485"
-```
-
-```r
 data <- filtered.genes$data
 coord <- coord[colnames(data),]
 
