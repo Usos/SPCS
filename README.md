@@ -1,4 +1,4 @@
-# SPCS:A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression
+# SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression
 _Yusong Liu, Tongxin Wang, Ben Duggan, Kun Huang, Jie Zhang, Xiufen Ye, Travis S. Johnson_  
 College of Intelligent Systems Science and Engineering, Harbin Engineering University  
 Indiana University School of Medicine
@@ -31,7 +31,7 @@ P.S: Other versions of these packages may also work well with our implementation
 
 ## The citation
 If any code in this reposition is used in any publishable works, please citing:
-  - **Liu Y, Wang T, Duggan B _et al._**, "SPCS:A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (Under review).
+  - **Liu Y, Wang T, Duggan B _et al._**, "SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (Under review).
       
 If the test data in this reposition is used in any publishable works, please citing:
   - **Moncada R, Barkley D, Wagner F _et al._**, "Integrating microarray-based spatial transcriptomics and single-cell RNA-seq reveals tissue architecture in pancreatic ductal adenocarcinomas", _Nature Biotechnology_ (2020), 38:333-342.
