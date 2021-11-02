@@ -1,11 +1,9 @@
 # SPCS:A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression
-_Yusong Liu, Tongxin Wang, Ben Duggan, Kun Huang, Jie Zhang, Xiufen Ye, Travis S. Johnson_
-
-College of Intelligent Systems Science and Engineering, Harbin Engineering University
-
+_Yusong Liu, Tongxin Wang, Ben Duggan, Kun Huang, Jie Zhang, Xiufen Ye, Travis S. Johnson_  
+College of Intelligent Systems Science and Engineering, Harbin Engineering University  
 Indiana University School of Medicine
 
-If there's any question about this project, please send email to johnstr@iu.edu or yexiufen@hrbeu.edu.cn. 
+If there's any question about this project, please send emails to johnstr@iu.edu or yexiufen@hrbeu.edu.cn. 
 
 ## The method
 Spatial and Pattern Combined Smoothing (SPCS) is a novel two-factor smoothing technique, that employs k-nearest neighbor technique to utilize associations from transcriptome and Euclidean space from the Spatial Transcriptomic (ST) data. This reposition is an R implementation of SPCS method, including tutorial and a test slide. The test slide is one of pancreatic ductal adenocarcinoma (PDAC) slide provided in (Moncada R, et.al 2020).
@@ -33,10 +31,8 @@ P.S: Other versions of these packages may also work well with our implementation
 
 ## The citation
 If any code in this reposition is used in any publishable works, please citing:
-  - Liu Y, Wang T, Duggan B, et al., 
-      "SPCS:A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (Under review).
+  - **Liu Y, Wang T, Duggan B _et al._**, "SPCS:A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (Under review).
       
 If the test data in this reposition is used in any publishable works, please citing:
-  - Moncada R, Barkley D, Wagner F et al., 
-      "Integrating microarray-based spatial transcriptomics and single-cell RNA-seq reveals tissue architecture in pancreatic ductal adenocarcinomas", _Nature Biotechnology_ (2020), 38:333-342.
+  - **Moncada R, Barkley D, Wagner F _et al._**, "Integrating microarray-based spatial transcriptomics and single-cell RNA-seq reveals tissue architecture in pancreatic ductal adenocarcinomas", _Nature Biotechnology_ (2020), 38:333-342.
 
