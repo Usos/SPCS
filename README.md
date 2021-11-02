@@ -33,7 +33,7 @@ P.S: Other versions of these packages may also work well with our implementation
 
 ## The citation
 If any code in this reposition is used in any publishable works, please citing:
-  - Yusong Liu, Tongxin Wang, Ben Duggan, et al., 
+  - Liu Y, Wang T, Duggan B, et al., 
       "SPCS:A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (Under review).
       
 If the test data in this reposition is used in any publishable works, please citing:
