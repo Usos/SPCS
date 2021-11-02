@@ -14,20 +14,21 @@ Spatial and Pattern Combined Smoothing (SPCS) is a novel two-factor smoothing te
 ## The dependencies
 This is an R implementation based on following packages:
 
-- Matrix 1.2-18
+- Matrix 1.3.4
 - rsvd 1.0.5
 - factoextra 1.0.7
 - foreach 1.5.1
-- dplyr 1.0.4
+- dplyr 1.0.7
 - doParallel 1.0.16
 
 To draw the heatmap of gene expression, please also include:
 
-- ggplot2 3.3.3
+- ggplot2 3.3.5
 
 P.S: Other versions of these packages may also work well with our implementation.
 
 ## The tutorial
+We have provided a step-by-step tutorial for our SPCS R implementation. Please see "tutorial.htm" for details.
 
 ## The citation
 If any code in this reposition is used in any publishable works, please citing:
