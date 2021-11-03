@@ -4,11 +4,11 @@ _Yusong Liu_
 
 Spatial and Pattern Combined Smoothing (SPCS) is a novel two-factor smoothing technique, that employs k-nearest neighbor technique to utilize associations from transcriptome and Euclidean space from the Spatial Transcriptomic (ST) data. Here we present an R implementation of this method and provide a step-by-step example using a PDAC slide (PDACA1) in (Moncada R, et.al 2020).
 
-# Before the smoothing
+## Before the smoothing
 
 Before performing the smoothing, we have to introduce the dependent packages and example data we will use.
 
-## Dependencies
+### Dependencies
 
 All the codes are built with R 4.1.2. Here are the packages we used in our implementation. Note that different versions of the packages may also work well with our codes.
 
@@ -27,7 +27,7 @@ Table: Dependent Packages
 |doParallel |1.0.16  |
 |ggplot2    |3.3.5   |
 
-## Example Data
+### Example Data
 
 Data we used is PDACA1 slide in (Moncada R, et.al 2020). There are two tables, data table and coordinate table, for each slide. Data table is a matrix that each column is representing a spot and each row representing a gene, while coordinate table including spatial coordinate for each spot. We also provided histopathlogical labels as a reference.
 
@@ -100,7 +100,7 @@ data[1:10,1:7]
 ## AES        4.068414 4.519153 3.783602 5.366023 0.000000 0.000000 5.318697
 ```
 
-# Performing SPCS Smoothing
+## Performing SPCS Smoothing
 
 SPCS smooths the ST expression date using both spatial position and expression pattern information. Let $X_i$ be a vector of gene expression values for spot $i$, smoothed expression $X_i^\prime$ can be calculated by:
 $$X_i^\prime=(1-\alpha)X_i+\alpha(\beta\frac{\sum_{j\in N_s(i)}{c_{ji}^sX_j}}{\sum_{k\in N_s(i)}{c_{ki}^s}}+(1-\beta)\frac{\sum_{j\in N_p(i)}{c_{ji}^pX_j}}{\sum_{k\in N_p(i)}{c_{ki}^p}})$$
@@ -116,7 +116,7 @@ beta=0.4
 
 Hence, there are two steps before get the smoothed expression: finding neighbors and calculating smoothed expression.
 
-## Finding neighbors
+### Finding neighbors
 
 For pattern neighbors, we first transform the expression of spots into a 10-dimensional principal component (PC) space (i.e. pattern space)and then select $\tau_p$ nearest neighbor spots as pattern neighbors for each spot. Last, for each neighbor of object spot, calculating its pattern contribution to the object spot. 
 
@@ -142,7 +142,7 @@ p.neighbors <- findPNeighbors(rmat, positions, tau.p, nThreads)
 s.neighbors <- findSNeighbors(positions, tau.s, nThreads)
 ```
 
-## Calculating smoothed expression
+### Calculating smoothed expression
 
 After obatined all the pattern and spatial neighbors for each spot, we can calculate smoothed expression using the equation we provided.
 
@@ -152,7 +152,7 @@ data.combinedsmooth <- getCSmoothedExp(data.mat, s.neighbors, p.neighbors, alpha
 data.combinedsmooth <- as.data.frame(as.matrix(data.combinedsmooth))
 ```
 
-## One-step SPCS smoothing
+### One-step SPCS smoothing
 
 For ease of use, we further provided an one-step smoothing function:
 
@@ -178,7 +178,7 @@ data.combinedsmooth[1:10,1:7]
 ## AES        3.8656010 3.4119207 3.1890870 3.5477942 1.0710624 1.5261867 3.681295
 ```
 
-# Draw Expression heatmaps 
+## Draw Expression heatmaps 
 
 To visualize the result of smoothing, we can draw heatmap of specific gene expression. We show the heatmap of an important oncogene _TM4SF1_ for example. To make heatmap of different genes comparable, expression of genes first linearly transformed into [0,1] by dividing each value by the maximum expression value. 
 
@@ -201,7 +201,7 @@ ggplot(data.using, aes(coord1, coord2, fill=!!sym(gene))) + ggtitle(gene) +
 ```
 ![heatmap-1](https://user-images.githubusercontent.com/5370174/139857309-89cdba15-b9b8-4a8c-bd1d-a5d7355fd5b0.png)
 
-# Citation
+## Citation
 If any code in this reposition is used in any publishable works, please citing:
   - **Liu Y, Wang T, Duggan B _et al._**, "SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (Under review).
       
