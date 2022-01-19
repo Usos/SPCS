@@ -1,10 +1,3 @@
-#SPCS ST smoothing method
-#Code by Yusong Liu in HEU
-
-#If any part of this code is used in publishable documents, please cite:
-#    Yusong Liu, Tongxin Wang, and Ben Duggan et. al, 
-#          SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression (2021)
-
 require("Matrix")
 require("rsvd")
 require("factoextra")
@@ -98,8 +91,10 @@ GetPointNeighbors<-function(px,py,order=2,is.keepself=F)
   
 }
 
-findSNeighbors<-function(positions, tau.s=2, nThreads=8)
+findSNeighbors<-function(positions, is.hexa=F , tau.s=2, nThreads=8)
 {
+  if(is.hexa)
+    tau.s<-tau.s*2
 
   bars<-positions$barcodes
   ind.bars<-1:length(bars)
@@ -135,7 +130,7 @@ getCSmoothedExp<-function(exp, s.neighbors, p.neighbors, alpha, beta, nThreads=8
   bars<-names(p.neighbors)
   ind.bars<-1:length(p.neighbors)
   names(ind.bars)<-bars
-  
+
   cl=makeCluster(nThreads)
   registerDoParallel(cl)
   
@@ -163,11 +158,77 @@ getCSmoothedExp<-function(exp, s.neighbors, p.neighbors, alpha, beta, nThreads=8
   return(exp.smoothed)
 }
 
+fillBlanks<-function(exp, coord, is.hexa=F, tau.s=2, filling.threshold = 0.5, nThreads = 8)
+{
+
+  x.bounds<-c(min(coord$st.x),max(coord$st.x))
+  y.bounds<-c(min(coord$st.y),max(coord$st.y))
+  x.availible<-x.bounds[1]:x.bounds[2]
+  y.availible<-y.bounds[1]:y.bounds[2]
+  x.availible<-sort(rep(x.availible,length(y.availible)))
+  coord.maybe<-data.frame(st.x=x.availible,st.y=y.availible)
+
+  if(is.hexa)
+  {
+    tau.s<-tau.s*2
+    coord.maybe<- coord.maybe %>% 
+      mutate(is.exist = ((st.x %% 2) == (st.y %% 2))) %>%
+      select(st.x,st.y)
+   }
+  
+  coord.maybe<-suppressMessages(coord %>% right_join(coord.maybe,copy = T) %>% filter(is.na(barcodes)))
+  coord.maybe$barcodes<-paste0("SUPP",1:nrow(coord.maybe))
+  
+  cl=makeCluster(nThreads)
+  registerDoParallel(cl)
+  
+  s.neighbors<-foreach(i=1:nrow(coord.maybe),.packages = c("dplyr"),.export = c("GetPointNeighbors")) %dopar%
+    {
+      nbs.maybe<-GetPointNeighbors(px = coord.maybe$st.x[i],py = coord.maybe$st.y[i],order = tau.s)
+      if(is.hexa)
+        nbs.maybe<-nbs.maybe %>% filter(0 == distance %% 2)
+      
+      nbs<-coord %>% inner_join(nbs.maybe,by=c("st.x"="x","st.y"="y"))
+      if(nrow(nbs)>filling.threshold * nrow(nbs.maybe))
+      {
+        nbs %>%
+        mutate(s.contribution=(1/distance)) %>%
+        mutate(ss.contribution=s.contribution/(sum(s.contribution)+0.00000001))
+      } else
+      NULL
+    }
+  
+  names(s.neighbors)<-coord.maybe$barcodes
+  s.neighbors<-s.neighbors[sapply(s.neighbors,function(x){!is.null(x)})]
+  
+  if(0==length(s.neighbors))
+  {
+    s.exp<-NULL
+    s.neighbors<-NULL
+  }
+  else
+  {
+    s.exp<-foreach(i=1:length(s.neighbors),.combine = "cbind",.packages = c("dplyr","Matrix")) %dopar%
+      {
+        exp[,s.neighbors[[i]]$barcodes] %*% Matrix(s.neighbors[[i]]$ss.contribution,sparse=T)
+      }
+    colnames(s.exp)<-names(s.neighbors)
+  }
+  stopCluster(cl)
+  
+  return(list(exp=s.exp,colData=filter(coord.maybe,barcodes %in% names(s.neighbors))))
+}
+
 #Run SPCS
-SPCS<-function(data.tbl, coor.tbl, tau.p=16, tau.s=2, alpha=0.6, beta=0.4, nThreads=8)
+SPCS<-function(data.tbl, coor.tbl, is.hexa = F, is.padding =T, tau.p=16, tau.s=2, alpha=0.6, beta=0.4, filling.thres=0.5, nThreads=8)
 {
   data.mat<-Matrix(as.matrix(data.tbl))
   
+  message(paste0("SPCS Smoothing on ",ncol(data.tbl)," spots with ",nrow(data.tbl)," genes"))
+  message("1) Pre-processing...",appendLF = F)
+  
+  t0<-proc.time()
+
   rpca.res = calcRandPCA(t(data.mat)) 
   pdist.mat = calcPDist(rpca.res)  
   rmat = calcPContribution(pdist.mat)  
@@ -175,12 +236,50 @@ SPCS<-function(data.tbl, coor.tbl, tau.p=16, tau.s=2, alpha=0.6, beta=0.4, nThre
   positions = coor.tbl
   colnames(positions) = c("st.x","st.y")
   positions$barcodes = rownames(positions)
+
+  t1<-proc.time()
+  message("Finished. Time Elapsed:",(t1-t0)["elapsed"],"secs (incl. sys. cost",(t1-t0)["sys.self"],"secs).")
   
+  message("2) Detecting neighbors...\n"," --Pattern neighbors...",appendLF = F)
+  t0<-proc.time()
+
   p.neighbors <- findPNeighbors(rmat, positions, tau.p, nThreads)
-  s.neighbors <- findSNeighbors(positions, tau.s, nThreads)
+
+  t1<-proc.time()
+  message("Finished. Time Elapsed:",(t1-t0)["elapsed"],"secs (incl. sys. cost",(t1-t0)["sys.self"],"secs).\n"," --Spatial neighbors...",appendLF = F)
+  t0<-proc.time()
+
+  s.neighbors <- findSNeighbors(positions,is.hexa, tau.s, nThreads)
+
+  t1<-proc.time()
+  message("Finished. Time Elapsed:",(t1-t0)["elapsed"],"secs (incl. sys. cost",(t1-t0)["sys.self"],"secs).")
   
+  message("3) Calculating expression...",appendLF = F)
+  t0<-proc.time()
+
   data.tbl.combinedsmooth = getCSmoothedExp(data.mat, s.neighbors, p.neighbors, alpha, beta, nThreads)
-  data.tbl.combinedsmooth = as.data.frame(as.matrix(data.tbl.combinedsmooth))
+
+  t1<-proc.time()
+  message("Finished. Time Elapsed:",(t1-t0)["elapsed"],"secs (incl. sys. cost",(t1-t0)["sys.self"],"secs).")
+  
+  if(is.padding)
+  {
+    message("4) Filling blank spots...",appendLF = F)
+    t0<-proc.time()
+
+    filled.blanks<-fillBlanks(data.tbl.combinedsmooth, positions, is.hexa, tau.s, filling.thres, nThreads)
+
+    t1<-proc.time()
+    message("Finished. Time Elapsed:",(t1-t0)["elapsed"],"secs (incl. sys. cost",(t1-t0)["sys.self"],"secs).\n",
+        nrow(filled.blanks$colData),"blank spots has been filled.")
+    data.tbl.combinedsmooth = as.data.frame(as.matrix(cbind(data.tbl.combinedsmooth,filled.blanks$exp)))
+    attr(data.tbl.combinedsmooth,"SUPP_ColData")<-filled.blanks$colData
+  }
+  else
+  {
+    data.tbl.combinedsmooth = as.data.frame(as.matrix(data.tbl.combinedsmooth))
+  }
+  
   
   if (sum(is.na(data.tbl.combinedsmooth)) > 0) {
     mean.exp = sum(data.tbl.combinedsmooth[!is.na(data.tbl.combinedsmooth)]) / sum(!is.na(data.tbl.combinedsmooth))
