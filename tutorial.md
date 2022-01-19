@@ -114,6 +114,17 @@ alpha=0.6
 beta=0.4
 ```
 
+If the slide going to smoothed is a Visium slides, please set following parameters:
+
+```r
+is.hexa=T
+```
+If missing spot padding is needed, please set:
+
+```r
+is.padding=T
+```
+
 Hence, there are two steps before get the smoothed expression: finding neighbors and calculating smoothed expression.
 
 ### Finding neighbors
