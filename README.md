@@ -32,8 +32,7 @@ We have provided a step-by-step tutorial for our SPCS R implementation. Please s
 
 ## The citation
 If any code in this reposition is used in any publishable works, please citing:
-  - **Liu Y, Wang T, Duggan B _et al._**, "SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _bioRxiv_ (2021), 2021.11.02.467030, doi: https://doi.org/10.1101/2021.11.02.467030. \[_Briefings in Bioinformatics_ (Under Review After Major Revision)\]
-      
+  - **Liu Y, Wang T, Duggan B _et al._**, "SPCS: A Spatial and Pattern Combined Smoothing Method for Spatial Transcriptomic Expression", _Briefings in Bioinformatics_ (2022), bbac116, doi: https://doi.org/10.1093/bib/bbac116.       
 If the test data in this reposition is used in any publishable works, please citing:
   - **Moncada R, Barkley D, Wagner F _et al._**, "Integrating microarray-based spatial transcriptomics and single-cell RNA-seq reveals tissue architecture in pancreatic ductal adenocarcinomas", _Nature Biotechnology_ (2020), 38:333-342, doi: https://doi.org/10.1038/s41587-019-0392-8.
 
